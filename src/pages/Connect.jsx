@@ -25,7 +25,7 @@ const FIELDS = [
 ];
 
 const input =
-  'w-full rounded-xl border border-border bg-white px-3.5 py-2.5 text-[14px] text-navy outline-none transition-colors focus:border-navy/40';
+  'w-full rounded-xl border border-border bg-white px-3.5 py-2.5 text-[14px] text-navy outline-none transition-colors focus:border-brand/50';
 
 function Field({ label, className = '', children }) {
   return (
@@ -38,7 +38,7 @@ function Field({ label, className = '', children }) {
 
 function Section({ icon: Icon, title, subtitle, children }) {
   return (
-    <section className="rounded-2xl border border-border bg-white p-5 sm:p-6">
+    <section className="rounded-3xl border border-border/70 bg-white p-5 sm:p-6">
       <div className="flex items-center gap-3">
         <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-secondary text-navy">
           <Icon className="h-5 w-5" strokeWidth={2} />
@@ -89,6 +89,10 @@ export default function Connect() {
       setError('Household size must include at least one adult plus the children.');
       return;
     }
+    if (form.monthly_income == null || form.monthly_income === '') {
+      setError('Add a pay stub, or enter your monthly income yourself.');
+      return;
+    }
     setSaving(true);
     try {
       const now = new Date().toISOString();
@@ -129,7 +133,7 @@ export default function Connect() {
         <FlowProgress current={1} />
 
         <div className="mb-7">
-          <h1 className="font-heading text-[26px] font-semibold leading-tight text-navy sm:text-[30px]">
+          <h1 className="font-heading text-[30px] font-semibold leading-tight tracking-tight text-navy sm:text-[34px]">
             Tell us about your household
           </h1>
           <p className="mt-2 max-w-xl text-[14.5px] leading-relaxed text-navy-muted">
@@ -173,7 +177,7 @@ export default function Connect() {
             <label className="flex items-start gap-3 rounded-xl bg-canvas px-4 py-3 sm:col-span-2">
               <input
                 type="checkbox"
-                className="mt-0.5 h-4 w-4 accent-navy"
+                className="mt-0.5 h-4 w-4 accent-brand"
                 checked={Boolean(form.has_young_child_or_pregnant)}
                 onChange={(e) => set({ has_young_child_or_pregnant: e.target.checked })}
               />

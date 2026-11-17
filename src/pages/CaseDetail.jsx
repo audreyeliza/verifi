@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { ArrowLeft, Users, Wallet, MapPin, Baby, Check, Loader2, CheckCheck } from 'lucide-react';
+import { ArrowLeft, Users, Wallet, MapPin, Baby, Check, Loader2, CheckCheck, FileText } from 'lucide-react';
 import VerifiNav from '@/components/VerifiNav';
 import StatusPill from '@/components/StatusPill';
 import { useToast } from '@/components/ui/use-toast';
@@ -13,6 +13,7 @@ import {
   shortDateTime,
   toList,
 } from '@/lib/verifi';
+import { formatPayDate, frequencyLabel } from '@/lib/income';
 
 function ApplicationActions({ application, onUpdate, busy }) {
   const [denying, setDenying] = useState(false);
@@ -36,7 +37,7 @@ function ApplicationActions({ application, onUpdate, busy }) {
           autoFocus
           required
           placeholder="Reason for denial (the applicant will see this)"
-          className="flex-1 rounded-lg border border-border px-3 py-2 text-[13px] outline-none focus:border-navy/40"
+          className="flex-1 rounded-xl border border-border bg-white px-3 py-2 text-[13px] outline-none focus:border-brand/50"
           value={reason}
           onChange={(e) => setReason(e.target.value)}
         />
@@ -74,17 +75,39 @@ export default function CaseDetail() {
   const { toast } = useToast();
   const [applicant, setApplicant] = useState(null);
   const [applications, setApplications] = useState([]);
+  const [documents, setDocuments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [approving, setApproving] = useState(false);
+  const [openingId, setOpeningId] = useState('');
 
   const load = async () => {
-    const [applicantRow, applicationsResult] = await Promise.all([
+    const [applicantRow, applicationsResult, documentsResult] = await Promise.all([
       base44.entities.Applicant.get(id),
       base44.entities.Application.filter({ applicant: id }, '-submitted_at', 50),
+      base44.entities.IncomeDocument.filter({ applicant: id }, '-created_date', 20),
     ]);
     setApplicant(applicantRow ?? null);
     setApplications(toList(applicationsResult));
+    setDocuments(toList(documentsResult));
     setLoading(false);
+  };
+
+  const openDocument = async (doc) => {
+    setOpeningId(doc.id);
+    try {
+      const response = await base44.functions.invoke('viewPrivateDocument', { kind: 'income', id: doc.id });
+      const url = response.data?.signed_url;
+      if (!url) throw new Error('Could not open that file.');
+      window.open(url, '_blank', 'noopener,noreferrer');
+    } catch (err) {
+      toast({
+        title: 'Could not open the pay stub',
+        description: err.response?.data?.error || err.message,
+        variant: 'destructive',
+      });
+    } finally {
+      setOpeningId('');
+    }
   };
 
   useEffect(() => {
@@ -242,7 +265,7 @@ export default function CaseDetail() {
               type="button"
               onClick={approveAll}
               disabled={approving || submittedCount === 0}
-              className="inline-flex items-center justify-center gap-2 rounded-xl bg-verify px-5 py-3 text-[14.5px] font-semibold text-white transition-all hover:bg-green-700 hover:shadow-lg hover:shadow-verify/25 disabled:cursor-not-allowed disabled:bg-slate-300 disabled:shadow-none"
+              className="inline-flex items-center justify-center gap-2 rounded-2xl bg-brand px-5 py-3 text-[14.5px] font-semibold text-white transition-all hover:bg-brand-deep hover:shadow-lg hover:shadow-brand/25 disabled:cursor-not-allowed disabled:bg-slate-300 disabled:shadow-none"
             >
               {approving ? (
                 <Loader2 className="h-4 w-4 animate-spin" />
@@ -262,7 +285,7 @@ export default function CaseDetail() {
           <h2 className="px-1 text-[12px] font-semibold uppercase tracking-[0.12em] text-navy-muted">
             Profile
           </h2>
-          <div className="mt-2.5 overflow-hidden rounded-2xl border border-border bg-white">
+          <div className="mt-2.5 overflow-hidden rounded-3xl border border-border/70 bg-white">
             {fields.map((field) => (
               <div
                 key={field.label}
@@ -289,16 +312,55 @@ export default function CaseDetail() {
 
         <section className="mt-7">
           <h2 className="px-1 text-[12px] font-semibold uppercase tracking-[0.12em] text-navy-muted">
+            Pay stubs
+          </h2>
+          {documents.length === 0 ? (
+            <div className="mt-2.5 rounded-3xl border border-dashed border-border/70 bg-white px-5 py-8 text-center">
+              <p className="text-[13.5px] text-muted-foreground">No pay stubs uploaded.</p>
+            </div>
+          ) : (
+            <div className="mt-2.5 overflow-hidden rounded-3xl border border-border/70 bg-white">
+              {documents.map((doc) => (
+                <div key={doc.id} className="flex flex-wrap items-center gap-3 border-b border-border/60 px-5 py-4 last:border-0">
+                  <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-secondary text-navy">
+                    <FileText className="h-4 w-4" />
+                  </span>
+                  <div className="min-w-0 flex-1">
+                    <p className="font-heading text-[14.5px] font-semibold text-navy">{doc.employer || 'Pay stub'}</p>
+                    <p className="text-[12px] text-muted-foreground">
+                      {doc.gross_pay != null ? `${money(doc.gross_pay)} gross` : 'Gross pay not listed'}
+                      {' · '}
+                      {frequencyLabel(doc.pay_frequency)}
+                      {doc.pay_date ? ` · ${formatPayDate(doc.pay_date)}` : ''}
+                      {doc.monthly_equivalent != null ? ` · about ${money(doc.monthly_equivalent)}/mo` : ''}
+                    </p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => openDocument(doc)}
+                    disabled={openingId === doc.id}
+                    className="rounded-2xl bg-brand px-3.5 py-1.5 text-[12.5px] font-semibold text-white hover:bg-brand-deep disabled:opacity-50"
+                  >
+                    {openingId === doc.id ? 'Opening…' : 'View'}
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
+        </section>
+
+        <section className="mt-7">
+          <h2 className="px-1 text-[12px] font-semibold uppercase tracking-[0.12em] text-navy-muted">
             Applications
           </h2>
           {applications.length === 0 ? (
-            <div className="mt-2.5 rounded-2xl border border-dashed border-border bg-white px-5 py-10 text-center">
+            <div className="mt-2.5 rounded-3xl border border-dashed border-border/70 bg-white px-5 py-10 text-center">
               <p className="text-[13.5px] text-muted-foreground">
                 No applications submitted yet.
               </p>
             </div>
           ) : (
-            <div className="mt-2.5 overflow-hidden rounded-2xl border border-border bg-white">
+            <div className="mt-2.5 overflow-hidden rounded-3xl border border-border/70 bg-white">
               {applications.map((application) => (
                 <div
                   key={application.id}
@@ -338,7 +400,7 @@ export default function CaseDetail() {
         </section>
 
         {applicant.status === 'Approved' && (
-          <div className="mt-6 flex items-start gap-3 rounded-2xl border border-verify/25 bg-verify-soft/60 px-5 py-4">
+          <div className="mt-6 flex items-start gap-3 rounded-3xl border border-verify/25 bg-verify-soft/60 px-5 py-4">
             <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-verify text-white">
               <Check className="h-3.5 w-3.5" strokeWidth={3} />
             </span>
