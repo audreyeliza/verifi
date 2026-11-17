@@ -117,7 +117,7 @@ export default function CaseworkerQueue() {
         ) : (
           <>
             {/* Desktop table */}
-            <div className="mt-6 hidden overflow-hidden rounded-2xl border border-border bg-white md:block">
+            <div className="mt-6 hidden overflow-hidden rounded-3xl border border-border/70 bg-white md:block">
               <table className="w-full text-left">
                 <thead>
                   <tr className="border-b border-border bg-canvas/70 text-[11px] uppercase tracking-[0.1em] text-navy-muted">
@@ -139,7 +139,7 @@ export default function CaseworkerQueue() {
                       >
                         <td className="px-5 py-4">
                           <Link to={`/caseworker/${applicant.id}`} className="flex items-center gap-3">
-                            <span className="flex h-9 w-9 items-center justify-center rounded-full bg-secondary text-[12px] font-semibold text-navy">
+                            <span className="flex h-9 w-9 items-center justify-center rounded-full bg-brand-soft text-[12px] font-semibold text-brand">
                               {initials(applicant.name)}
                             </span>
                             <span>
@@ -195,11 +195,11 @@ export default function CaseworkerQueue() {
                   <Link
                     key={applicant.id}
                     to={`/caseworker/${applicant.id}`}
-                    className="block rounded-2xl border border-border bg-white p-4"
+                    className="block rounded-3xl border border-border/70 bg-white p-4"
                   >
                     <div className="flex items-start justify-between gap-3">
                       <div className="flex items-center gap-2.5">
-                        <span className="flex h-9 w-9 items-center justify-center rounded-full bg-secondary text-[12px] font-semibold text-navy">
+                        <span className="flex h-9 w-9 items-center justify-center rounded-full bg-brand-soft text-[12px] font-semibold text-brand">
                           {initials(applicant.name)}
                         </span>
                         <div>

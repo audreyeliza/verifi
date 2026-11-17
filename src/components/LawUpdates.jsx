@@ -6,7 +6,7 @@ import { cn } from '@/lib/utils';
 const LEVEL_STYLE = {
   affected: { label: 'Affects you', className: 'bg-amber-100 text-amber-800' },
   maybe: { label: 'May affect you', className: 'bg-blue-100 text-brand-deep' },
-  not_affected: { label: 'Not affected', className: 'bg-secondary text-navy-muted' },
+  not_affected: { label: 'Not affected', className: 'bg-brand-soft text-brand/70' },
 };
 
 const STATUS_STYLE = {

@@ -34,57 +34,27 @@ const PROGRAMS = [
 
 function VerifiedPreview() {
   return (
-    <div className="relative">
-      <div className="absolute -inset-4 -z-10 rounded-[2.5rem] bg-verify-soft/70 blur-2xl" />
-      <div className="rounded-3xl border border-border bg-white p-6 shadow-card sm:p-7">
-        <p className="mb-4 text-[11px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
-          Example profile
-        </p>
+    <div className="relative mx-auto max-w-sm">
+      <div className="absolute -inset-6 -z-10 rounded-[3rem] bg-brand/20 blur-3xl" />
+      <div className="bg-brand-card rounded-[1.75rem] p-6 text-white shadow-[0_24px_48px_-24px_rgba(47,79,230,0.7)]">
         <div className="flex items-start justify-between">
-          <div className="flex items-center gap-3">
-            <span className="flex h-11 w-11 items-center justify-center rounded-full bg-secondary font-heading text-sm font-semibold text-navy">
-              ML
-            </span>
-            <div>
-              <p className="font-heading text-[15px] font-semibold text-navy">Maria Lopez</p>
-              <p className="text-[13px] text-muted-foreground">Columbus, OH · Household of 3</p>
-            </div>
-          </div>
-          <span className="inline-flex items-center gap-1.5 rounded-full bg-verify-soft px-2.5 py-1 text-[11px] font-semibold text-verify">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-white/75">Example profile</p>
+          <span className="inline-flex items-center gap-1 rounded-full bg-white px-2.5 py-1 text-[11.5px] font-semibold text-brand">
             <ShieldCheck className="h-3.5 w-3.5" strokeWidth={2.4} />
             Verified
           </span>
         </div>
+        <p className="mt-5 font-heading text-[28px] font-semibold leading-tight">Maria Lopez</p>
+        <p className="mt-1 text-[13.5px] text-white/80">Household of 3 · Columbus, OH</p>
+        <p className="mt-8 text-[13px] text-white/85">One profile, ready for every program.</p>
+      </div>
 
-        <dl className="mt-6 space-y-0.5">
-          {[
-            ['Income', '$2,100/mo', 'Pay stub'],
-            ['Household', '3 people', 'Profile'],
-            ['Address', 'Columbus, OH', 'Profile'],
-          ].map(([label, value, source]) => (
-            <div
-              key={label}
-              className="flex items-center justify-between border-b border-border/60 py-2.5 last:border-0"
-            >
-              <dt className="text-[13px] text-muted-foreground">{label}</dt>
-              <dd className="flex items-center gap-2">
-                <span className="text-[13px] font-medium text-navy">{value}</span>
-                <span className="rounded-md bg-secondary px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-navy-muted">
-                  {source}
-                </span>
-              </dd>
-            </div>
-          ))}
-        </dl>
-
-        <div className="mt-5 grid grid-cols-2 gap-2">
+      <div className="-mt-6 rounded-[1.75rem] bg-navy p-5 pt-10 text-white">
+        <div className="grid grid-cols-2 gap-2">
           {PROGRAMS.map((p) => (
-            <div
-              key={p.name}
-              className="rounded-xl border border-border/80 bg-canvas px-3 py-2.5"
-            >
-              <p className="text-[13px] font-semibold text-navy">{p.name}</p>
-              <p className="text-[11px] text-verify">{p.value}</p>
+            <div key={p.name} className="rounded-2xl bg-white/[0.07] px-3.5 py-3 ring-1 ring-white/10">
+              <p className="font-heading text-[14px] font-semibold">{p.name}</p>
+              <p className="text-[11.5px] text-white/60">{p.value}</p>
             </div>
           ))}
         </div>
@@ -99,7 +69,7 @@ export default function Landing() {
   if (isAuthenticated) return <Navigate to={homePathFor(user)} replace />;
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-canvas">
       <VerifiNav />
 
       <main className="mx-auto max-w-6xl px-5 sm:px-8">
@@ -113,12 +83,12 @@ export default function Landing() {
             <h1 className="mt-6 font-heading text-[40px] font-semibold leading-[1.04] text-navy sm:text-[56px] lg:text-[64px]">
               Verify once.
               <br />
-              <span className="text-verify">Apply everywhere.</span>
+              <span className="text-brand">Apply everywhere.</span>
             </h1>
 
             <p className="mt-6 max-w-xl text-[16px] leading-relaxed text-navy-muted sm:text-[17px]">
-              Families prove the same income 4 times for 4 programs. Verifi pulls verified records
-              from the source—with consent—into every application at once.
+              Families prove the same income 4 times for 4 programs. With Verifi you fill out one
+              profile, upload a pay stub once, and apply to SNAP, WIC, HEAP and Medicaid together.
             </p>
 
             <div className="mt-9 flex flex-col gap-3 sm:flex-row">
@@ -131,7 +101,7 @@ export default function Landing() {
               </Link>
               <Link
                 to="/login"
-                className="inline-flex items-center justify-center rounded-2xl border border-border bg-white px-6 py-3.5 text-[15px] font-semibold text-navy transition-colors hover:border-navy/30 hover:bg-canvas"
+                className="inline-flex items-center justify-center rounded-3xl border border-border/70 bg-white px-6 py-3.5 text-[15px] font-semibold text-navy transition-colors hover:border-navy/30 hover:bg-canvas"
               >
                 Log in
               </Link>
@@ -152,10 +122,10 @@ export default function Landing() {
             {STATS.map((stat, i) => (
               <div
                 key={stat.title}
-                className="animate-rise rounded-2xl border border-border bg-white p-6 transition-shadow hover:shadow-card"
+                className="animate-rise rounded-3xl border border-border/70 bg-white p-6 transition-shadow hover:shadow-card"
                 style={{ animationDelay: `${180 + i * 90}ms` }}
               >
-                <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-secondary text-navy">
+                <span className="flex h-10 w-10 items-center justify-center rounded-2xl bg-brand-soft text-brand">
                   <stat.icon className="h-[18px] w-[18px]" strokeWidth={2} />
                 </span>
                 <p className="mt-5 font-heading text-[26px] font-semibold leading-tight text-navy">

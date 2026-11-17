@@ -16,7 +16,7 @@ export default function FlowProgress({ current }) {
                 className={cn(
                   'flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-[11px] font-semibold transition-colors',
                   done && 'bg-verify text-white',
-                  active && 'bg-navy text-white',
+                  active && 'bg-brand text-white',
                   !done && !active && 'bg-secondary text-muted-foreground'
                 )}
               >
@@ -25,7 +25,7 @@ export default function FlowProgress({ current }) {
               <span
                 className={cn(
                   'hidden text-[12.5px] font-medium sm:block',
-                  active ? 'text-navy' : 'text-muted-foreground'
+                  active ? 'text-brand' : 'text-muted-foreground'
                 )}
               >
                 {step}

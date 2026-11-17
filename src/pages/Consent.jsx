@@ -72,7 +72,7 @@ export default function Consent() {
           <span className="text-[11.5px] font-semibold uppercase tracking-[0.14em] text-navy-muted">
             Consent request
           </span>
-          <h1 className="mt-3 font-heading text-[26px] font-semibold leading-tight text-navy sm:text-[30px]">
+          <h1 className="mt-3 font-heading text-[30px] font-semibold leading-tight tracking-tight text-navy sm:text-[34px]">
             {firstName ? `${firstName}, Verifi` : 'Verifi'} would like to verify:
           </h1>
           <p className="mt-2 text-[14.5px] leading-relaxed text-navy-muted">

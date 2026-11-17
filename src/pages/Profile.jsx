@@ -73,34 +73,41 @@ export default function Profile() {
           </div>
         ) : (
           <>
-            <div className="animate-rise overflow-hidden rounded-3xl border border-border bg-white shadow-card">
-              <div className="flex items-center gap-4 border-b border-border/70 px-6 py-6 sm:px-8">
-                <span className="flex h-12 w-12 items-center justify-center rounded-full bg-secondary font-heading text-[15px] font-semibold text-navy">
-                  {initials(applicant?.name)}
-                </span>
-                <div className="min-w-0">
-                  <h1 className="font-heading text-[20px] font-semibold leading-tight text-navy">
-                    {loading ? 'Loading your profile…' : `${applicant.name} · Your profile`}
-                  </h1>
-                  <p className="mt-0.5 text-[13px] text-muted-foreground">
-                    {applicant?.city ? `${applicant.city}, ${applicant.state} · Updated ${shortDate(applicant.verified_at || applicant.updated_date)}` : ' '}
-                  </p>
-                </div>
+            <div className="animate-rise bg-brand-card relative overflow-hidden rounded-[1.75rem] p-6 text-white shadow-[0_24px_48px_-24px_rgba(47,79,230,0.7)]">
+              <div className="flex items-start justify-between gap-3">
+                <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-white/75">
+                  Verifi household profile
+                </p>
                 <Link
                   to="/connect"
-                  className="ml-auto inline-flex items-center gap-1.5 rounded-lg border border-border px-3 py-1.5 text-[12.5px] font-semibold text-navy hover:bg-canvas"
+                  className="inline-flex items-center gap-1.5 rounded-full bg-white px-3 py-1.5 text-[12.5px] font-semibold text-brand"
                 >
                   <Pencil className="h-3.5 w-3.5" />
                   Edit
                 </Link>
               </div>
+              <div className="mt-5 flex items-center gap-4">
+                <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-white/15 font-heading text-[18px] font-semibold ring-1 ring-white/30">
+                  {initials(applicant?.name)}
+                </span>
+                <div className="min-w-0">
+                  <h1 className="truncate font-heading text-[26px] font-semibold leading-tight">
+                    {loading ? 'Loading…' : applicant.name}
+                  </h1>
+                  <p className="mt-0.5 text-[13px] text-white/80">
+                    {applicant?.city ? `${applicant.city}, ${applicant.state} · Updated ${shortDate(applicant.verified_at || applicant.updated_date)}` : ' '}
+                  </p>
+                </div>
+              </div>
+            </div>
 
+            <div className="mt-4 overflow-hidden rounded-3xl border border-border/70 bg-white shadow-card">
               <div className="divide-y divide-border/70">
                 {fields.map((field) => {
                   const style = SOURCE_STYLE[field.source] ?? SOURCE_STYLE['Self-reported'];
                   return (
                     <div key={field.label} className="flex items-center gap-3.5 px-6 py-4 sm:px-8">
-                      <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-secondary text-navy">
+                      <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-brand-soft text-brand">
                         <field.icon className="h-4 w-4" strokeWidth={2.1} />
                       </span>
                       <div className="min-w-0">

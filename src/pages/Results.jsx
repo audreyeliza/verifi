@@ -104,7 +104,7 @@ export default function Results() {
         <FlowProgress current={3} />
 
         <div className="mb-7">
-          <h1 className="font-heading text-[26px] font-semibold leading-tight text-navy sm:text-[30px]">
+          <h1 className="font-heading text-[30px] font-semibold leading-tight tracking-tight text-navy sm:text-[34px]">
             Checking all 4 programs
           </h1>
           <p className="mt-2 max-w-xl text-[14.5px] leading-relaxed text-navy-muted">
@@ -114,7 +114,7 @@ export default function Results() {
         </div>
 
         {error ? (
-          <div className="rounded-2xl border border-border bg-white p-6 text-center">
+          <div className="rounded-3xl border border-border/70 bg-white p-6 text-center">
             <p className="text-[14px] text-navy">{error}</p>
             <Link to="/connect" className="mt-4 inline-flex rounded-2xl bg-brand px-5 py-2.5 text-[14px] font-semibold text-white">
               Go to my profile
@@ -132,7 +132,7 @@ export default function Results() {
                   <div
                     key={key}
                     className={cn(
-                      'rounded-2xl border bg-white p-5 transition-all duration-500',
+                      'rounded-3xl border bg-white p-5 transition-all duration-500',
                       done ? `${style.border} shadow-card` : 'border-border'
                     )}
                   >
@@ -141,7 +141,7 @@ export default function Results() {
                         <span
                           className={cn(
                             'flex h-10 w-10 items-center justify-center rounded-xl transition-colors',
-                            done && r.result !== 'Not eligible' ? 'bg-verify-soft text-verify' : 'bg-secondary text-navy-muted'
+                            done && r.result !== 'Not eligible' ? 'bg-verify-soft text-verify' : 'bg-brand-soft text-brand/70'
                           )}
                         >
                           <Icon className="h-[18px] w-[18px]" strokeWidth={2} />
@@ -217,7 +217,7 @@ export default function Results() {
             <div className="mt-6 flex flex-col items-center gap-3">
               <Link
                 to="/applications"
-                className="group inline-flex items-center gap-2 rounded-xl border border-border bg-white px-5 py-3 text-[14px] font-semibold text-navy transition-colors hover:border-navy/30"
+                className="group inline-flex items-center gap-2 rounded-2xl border border-border/70 bg-white px-5 py-3 text-[14px] font-semibold text-navy transition-colors hover:border-navy/30"
               >
                 Track my applications
                 <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
