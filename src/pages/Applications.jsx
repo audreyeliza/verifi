@@ -110,6 +110,23 @@ export default function Applications() {
           )}
         </div>
 
+        {applicant && (
+          <Link
+            to="/calculator"
+            className="mb-5 flex items-center justify-between gap-3 rounded-3xl border border-border/70 bg-white px-4 py-4"
+          >
+            <span>
+              <span className="block font-heading text-[15px] font-semibold text-navy">
+                Thinking about more hours or a new job?
+              </span>
+              <span className="mt-0.5 block text-[13px] text-navy-muted">
+                See how your benefits estimate would change. It is only an estimate.
+              </span>
+            </span>
+            <ArrowRight className="h-4 w-4 shrink-0 text-brand" />
+          </Link>
+        )}
+
         {loading ? (
           <p className="py-16 text-center text-[14px] text-muted-foreground">Loading…</p>
         ) : !applicant || applications.length === 0 ? (

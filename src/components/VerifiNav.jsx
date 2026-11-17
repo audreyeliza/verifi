@@ -7,7 +7,7 @@ import { cn } from '@/lib/utils';
 // Each role has its own tabs. Caseworkers never see applicant screens and vice versa.
 export const APPLICANT_TABS = [
   { to: '/home', label: 'Home', match: ['/home'] },
-  { to: '/applications', label: 'Applications', match: ['/applications', '/results'] },
+  { to: '/applications', label: 'Applications', match: ['/applications', '/results', '/calculator'] },
   { to: '/profile', label: 'Profile', match: ['/profile', '/connect', '/consent'] },
 ];
 export const CASEWORKER_TABS = [

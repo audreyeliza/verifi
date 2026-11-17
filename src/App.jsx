@@ -21,6 +21,7 @@ import Connect from './pages/Connect';
 import Profile from './pages/Profile';
 import Results from './pages/Results';
 import Applications from './pages/Applications';
+import Calculator from './pages/Calculator';
 import Home from './pages/Home';
 import LawUpdatesAdmin from './pages/LawUpdatesAdmin';
 import CaseworkerQueue from './pages/CaseworkerQueue';
@@ -71,6 +72,7 @@ const AuthenticatedApp = () => {
           <Route path="/profile" element={<Profile />} />
           <Route path="/results" element={<Results />} />
           <Route path="/applications" element={<Applications />} />
+          <Route path="/calculator" element={<Calculator />} />
         </Route>
 
         {/* Caseworkers only (app role "admin") — applicants are redirected to /home */}
