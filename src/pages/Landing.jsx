@@ -1,6 +1,6 @@
-import { Link } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 import { useAuth } from '@/lib/AuthContext';
-import { isCaseworker } from '@/lib/verifi';
+import { homePathFor } from '@/components/RoleRoute';
 import { ArrowRight, ShieldCheck, FileStack, BadgeDollarSign, CalendarClock } from 'lucide-react';
 import VerifiNav from '@/components/VerifiNav';
 
@@ -95,7 +95,8 @@ function VerifiedPreview() {
 
 export default function Landing() {
   const { isAuthenticated, user } = useAuth();
-  const staff = isCaseworker(user);
+  // Signed-in people go straight to their own side of the app.
+  if (isAuthenticated) return <Navigate to={homePathFor(user)} replace />;
 
   return (
     <div className="min-h-screen bg-white">
@@ -122,29 +123,18 @@ export default function Landing() {
 
             <div className="mt-9 flex flex-col gap-3 sm:flex-row">
               <Link
-                to={isAuthenticated ? '/applications' : '/register'}
-                className="group inline-flex items-center justify-center gap-2 rounded-xl bg-navy px-6 py-3.5 text-[15px] font-semibold text-white transition-all hover:bg-navy-deep hover:shadow-lg hover:shadow-navy/20"
+                to="/register"
+                className="group inline-flex items-center justify-center gap-2 rounded-2xl bg-brand px-6 py-3.5 text-[15px] font-semibold text-white transition-all hover:bg-brand-deep hover:shadow-lg hover:shadow-brand/25"
               >
-                {isAuthenticated ? 'Go to my applications' : 'Get started'}
+                Get started
                 <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
               </Link>
-              {isAuthenticated ? (
-                staff && (
-                  <Link
-                    to="/caseworker"
-                    className="inline-flex items-center justify-center rounded-xl border border-border bg-white px-6 py-3.5 text-[15px] font-semibold text-navy transition-colors hover:border-navy/30 hover:bg-canvas"
-                  >
-                    Caseworker queue
-                  </Link>
-                )
-              ) : (
-                <Link
-                  to="/login"
-                  className="inline-flex items-center justify-center rounded-xl border border-border bg-white px-6 py-3.5 text-[15px] font-semibold text-navy transition-colors hover:border-navy/30 hover:bg-canvas"
-                >
-                  Log in
-                </Link>
-              )}
+              <Link
+                to="/login"
+                className="inline-flex items-center justify-center rounded-2xl border border-border bg-white px-6 py-3.5 text-[15px] font-semibold text-navy transition-colors hover:border-navy/30 hover:bg-canvas"
+              >
+                Log in
+              </Link>
             </div>
 
             <p className="mt-5 text-[13px] text-muted-foreground">

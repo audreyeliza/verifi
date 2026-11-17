@@ -190,7 +190,7 @@ export default function Connect() {
           <button
             type="submit"
             disabled={saving}
-            className="group mt-5 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-navy px-6 py-3.5 text-[15px] font-semibold text-white transition-all hover:bg-navy-deep hover:shadow-lg hover:shadow-navy/20 disabled:cursor-not-allowed disabled:bg-slate-300 disabled:shadow-none"
+            className="group mt-5 inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-brand px-6 py-3.5 text-[15px] font-semibold text-white transition-all hover:bg-brand-deep hover:shadow-lg hover:shadow-brand/25 disabled:cursor-not-allowed disabled:bg-slate-300 disabled:shadow-none"
           >
             {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : null}
             {saving ? 'Saving your profile…' : 'Continue'}

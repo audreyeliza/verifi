@@ -4,40 +4,44 @@ import { useAuth } from '@/lib/AuthContext';
 import { isCaseworker } from '@/lib/verifi';
 import { cn } from '@/lib/utils';
 
-const APPLICANT_PATHS = ['/', '/consent', '/connect', '/profile', '/results', '/applications'];
+// Each role has its own tabs. Caseworkers never see applicant screens and vice versa.
+export const APPLICANT_TABS = [
+  { to: '/home', label: 'Home', match: ['/home'] },
+  { to: '/applications', label: 'Applications', match: ['/applications', '/results'] },
+  { to: '/profile', label: 'Profile', match: ['/profile', '/connect', '/consent'] },
+];
+export const CASEWORKER_TABS = [
+  { to: '/caseworker', label: 'Queue', match: ['/caseworker'], exclude: ['/caseworker/updates'] },
+  { to: '/caseworker/updates', label: 'Law updates', match: ['/caseworker/updates'] },
+];
 
-function Tab({ to, active, children }) {
-  return (
-    <Link
-      to={to}
-      className={cn(
-        'rounded-full px-3.5 py-1.5 text-[13px] font-medium transition-colors sm:px-4',
-        active ? 'bg-white text-navy shadow-sm' : 'text-muted-foreground hover:text-navy'
-      )}
-    >
-      {children}
-    </Link>
-  );
-}
+export const isTabActive = (tab, pathname) =>
+  !(tab.exclude ?? []).some((x) => pathname.startsWith(x)) &&
+  tab.match.some((m) => pathname === m || pathname.startsWith(`${m}/`));
 
-export default function VerifiNav({ compact = false }) {
+export default function VerifiNav({ compact = false, className }) {
   const { pathname } = useLocation();
   const { user, isAuthenticated, logout } = useAuth();
-  const inCaseworker = pathname.startsWith('/caseworker');
   const staff = isCaseworker(user);
+  const tabs = staff ? CASEWORKER_TABS : APPLICANT_TABS;
 
   return (
-    <header className="sticky top-0 z-40 border-b border-border/70 bg-white/85 pt-[env(safe-area-inset-top)] backdrop-blur-md">
+    <header
+      className={cn(
+        'sticky top-0 z-40 border-b border-border/60 bg-canvas/85 pt-[env(safe-area-inset-top)] backdrop-blur-md',
+        className
+      )}
+    >
       <div className="mx-auto flex h-14 max-w-6xl items-center justify-between gap-3 px-4 sm:px-8 md:h-16">
-        <Link to="/" className="group flex shrink-0 items-center gap-2.5">
-          <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-navy text-white transition-transform group-hover:-translate-y-0.5">
+        <Link to={isAuthenticated ? (staff ? '/caseworker' : '/home') : '/'} className="group flex shrink-0 items-center gap-2.5">
+          <span className="flex h-9 w-9 items-center justify-center rounded-2xl bg-brand text-white transition-transform group-hover:-translate-y-0.5">
             <ShieldCheck className="h-[18px] w-[18px]" strokeWidth={2.2} />
           </span>
           <span className="flex flex-col leading-none">
-            <span className="font-heading text-[17px] font-semibold tracking-tight text-navy">Verifi</span>
+            <span className="font-heading text-[18px] font-semibold tracking-tight text-navy">Verifi</span>
             {!compact && (
               <span className="mt-1 hidden text-[11px] font-medium text-muted-foreground sm:block">
-                Verify once. Apply everywhere.
+                {staff ? 'Caseworker workspace' : 'Verify once. Apply everywhere.'}
               </span>
             )}
           </span>
@@ -45,15 +49,19 @@ export default function VerifiNav({ compact = false }) {
 
         <div className="flex min-w-0 items-center gap-2">
           {isAuthenticated && (
-            <nav className="hidden items-center gap-1 rounded-full bg-secondary p-1 md:flex">
-              <Tab to="/applications" active={!inCaseworker && pathname !== '/'}>
-                {staff ? 'Applicant' : 'My applications'}
-              </Tab>
-              {staff && (
-                <Tab to="/caseworker" active={inCaseworker}>
-                  Caseworker
-                </Tab>
-              )}
+            <nav className="hidden items-center gap-1 rounded-full bg-white p-1 shadow-sm md:flex">
+              {tabs.map((tab) => (
+                <Link
+                  key={tab.to}
+                  to={tab.to}
+                  className={cn(
+                    'rounded-full px-4 py-1.5 text-[13px] font-medium transition-colors',
+                    isTabActive(tab, pathname) ? 'bg-brand text-white' : 'text-muted-foreground hover:text-navy'
+                  )}
+                >
+                  {tab.label}
+                </Link>
+              ))}
             </nav>
           )}
 
@@ -65,7 +73,7 @@ export default function VerifiNav({ compact = false }) {
               <button
                 type="button"
                 onClick={() => logout()}
-                className="flex h-9 w-9 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-secondary hover:text-navy"
+                className="flex h-10 w-10 items-center justify-center rounded-full bg-white text-navy shadow-sm transition-colors hover:bg-secondary"
                 title="Log out"
                 aria-label="Log out"
               >
@@ -74,15 +82,12 @@ export default function VerifiNav({ compact = false }) {
             </div>
           ) : (
             <div className="flex items-center gap-1">
-              <Link
-                to="/login"
-                className="rounded-lg px-3 py-2 text-[13px] font-semibold text-navy hover:bg-secondary"
-              >
+              <Link to="/login" className="rounded-xl px-3 py-2 text-[13px] font-semibold text-navy hover:bg-white">
                 Log in
               </Link>
               <Link
                 to="/register"
-                className="hidden rounded-lg bg-navy px-3.5 py-2 text-[13px] font-semibold text-white hover:bg-navy-deep sm:block"
+                className="hidden rounded-xl bg-brand px-3.5 py-2 text-[13px] font-semibold text-white hover:bg-brand-deep sm:block"
               >
                 Sign up
               </Link>
@@ -93,5 +98,3 @@ export default function VerifiNav({ compact = false }) {
     </header>
   );
 }
-
-export { APPLICANT_PATHS };

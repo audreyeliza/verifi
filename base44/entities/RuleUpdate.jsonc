@@ -1,0 +1,84 @@
+{
+  "type": "object",
+  "name": "RuleUpdate",
+  "description": "A newly passed or upcoming law/rule change that affects benefit programs. Everyone can read; only caseworkers (admins) post or edit.",
+  "properties": {
+    "title": {
+      "type": "string"
+    },
+    "summary": {
+      "type": "string",
+      "description": "Plain-language: what is changing"
+    },
+    "what_to_do": {
+      "type": "string",
+      "description": "Plain-language: what an affected person should do"
+    },
+    "programs": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "SNAP",
+          "WIC",
+          "LIHEAP",
+          "Medicaid"
+        ]
+      }
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "Upcoming",
+        "In effect",
+        "Passed"
+      ],
+      "enumColors": [
+        "yellow",
+        "green",
+        "blue"
+      ],
+      "default": "Upcoming"
+    },
+    "effective_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "impact_key": {
+      "type": "string",
+      "description": "Optional key for personalized impact logic in src/lib/ruleImpact.js"
+    },
+    "source_name": {
+      "type": "string"
+    },
+    "source_url": {
+      "type": "string"
+    },
+    "published": {
+      "type": "boolean",
+      "default": true
+    }
+  },
+  "required": [
+    "title",
+    "summary"
+  ],
+  "rls": {
+    "read": {},
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

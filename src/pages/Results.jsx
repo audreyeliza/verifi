@@ -116,7 +116,7 @@ export default function Results() {
         {error ? (
           <div className="rounded-2xl border border-border bg-white p-6 text-center">
             <p className="text-[14px] text-navy">{error}</p>
-            <Link to="/connect" className="mt-4 inline-flex rounded-xl bg-navy px-5 py-2.5 text-[14px] font-semibold text-white">
+            <Link to="/connect" className="mt-4 inline-flex rounded-2xl bg-brand px-5 py-2.5 text-[14px] font-semibold text-white">
               Go to my profile
             </Link>
           </div>

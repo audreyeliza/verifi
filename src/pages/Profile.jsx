@@ -66,7 +66,7 @@ export default function Profile() {
             <p className="font-heading text-[18px] font-semibold text-navy">You haven&apos;t started yet</p>
             <Link
               to="/consent"
-              className="mt-5 inline-flex rounded-xl bg-navy px-5 py-3 text-[14px] font-semibold text-white hover:bg-navy-deep"
+              className="mt-5 inline-flex rounded-2xl bg-brand px-5 py-3 text-[14px] font-semibold text-white hover:bg-brand-deep"
             >
               Start your profile
             </Link>
@@ -133,7 +133,7 @@ export default function Profile() {
               type="button"
               onClick={() => navigate('/results')}
               disabled={loading || missing.length > 0}
-              className="group mt-6 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-navy px-6 py-4 text-[15.5px] font-semibold text-white transition-all hover:bg-navy-deep hover:shadow-lg hover:shadow-navy/20 disabled:cursor-not-allowed disabled:opacity-60"
+              className="group mt-6 inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-brand px-6 py-4 text-[15.5px] font-semibold text-white transition-all hover:bg-brand-deep hover:shadow-lg hover:shadow-brand/25 disabled:cursor-not-allowed disabled:opacity-60"
             >
               Check eligibility and apply
               <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />

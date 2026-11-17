@@ -7,7 +7,7 @@ import { AuthProvider, useAuth } from '@/lib/AuthContext';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
 import ScrollToTop from './components/ScrollToTop';
 import ProtectedRoute from '@/components/ProtectedRoute';
-import CaseworkerRoute from '@/components/CaseworkerRoute';
+import { ApplicantRoute, CaseworkerRoute } from '@/components/RoleRoute';
 import MobileTabBar from '@/components/MobileTabBar';
 // Add page imports here
 import Landing from './pages/Landing';
@@ -21,6 +21,8 @@ import Connect from './pages/Connect';
 import Profile from './pages/Profile';
 import Results from './pages/Results';
 import Applications from './pages/Applications';
+import Home from './pages/Home';
+import LawUpdatesAdmin from './pages/LawUpdatesAdmin';
 import CaseworkerQueue from './pages/CaseworkerQueue';
 import CaseDetail from './pages/CaseDetail';
 
@@ -60,17 +62,21 @@ const AuthenticatedApp = () => {
       <Route path="/reset-password" element={<ResetPassword />} />
       <Route path="/mfa" element={<Mfa />} />
 
-      {/* Signed-in applicants */}
       <Route element={<ProtectedRoute unauthenticatedElement={toLogin} />}>
-        <Route path="/consent" element={<Consent />} />
-        <Route path="/connect" element={<Connect />} />
-        <Route path="/profile" element={<Profile />} />
-        <Route path="/results" element={<Results />} />
-        <Route path="/applications" element={<Applications />} />
+        {/* Applicants only — caseworkers are redirected to /caseworker */}
+        <Route element={<ApplicantRoute />}>
+          <Route path="/home" element={<Home />} />
+          <Route path="/consent" element={<Consent />} />
+          <Route path="/connect" element={<Connect />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/results" element={<Results />} />
+          <Route path="/applications" element={<Applications />} />
+        </Route>
 
-        {/* Caseworkers only (app role "admin") */}
+        {/* Caseworkers only (app role "admin") — applicants are redirected to /home */}
         <Route element={<CaseworkerRoute />}>
           <Route path="/caseworker" element={<CaseworkerQueue />} />
+          <Route path="/caseworker/updates" element={<LawUpdatesAdmin />} />
           <Route path="/caseworker/:id" element={<CaseDetail />} />
         </Route>
       </Route>

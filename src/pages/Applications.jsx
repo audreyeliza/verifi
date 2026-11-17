@@ -120,7 +120,7 @@ export default function Applications() {
             </p>
             <Link
               to={applicant?.consent_at ? '/profile' : '/consent'}
-              className="group mt-6 inline-flex items-center gap-2 rounded-xl bg-navy px-5 py-3 text-[14px] font-semibold text-white hover:bg-navy-deep"
+              className="group mt-6 inline-flex items-center gap-2 rounded-2xl bg-brand px-5 py-3 text-[14px] font-semibold text-white hover:bg-brand-deep"
             >
               {applicant?.consent_at ? 'Continue my profile' : 'Get started'}
               <ArrowRight className="h-4 w-4" />

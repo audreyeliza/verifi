@@ -18,6 +18,11 @@ module.exports = {
   				deep: 'hsl(var(--navy-deep))',
   				muted: 'hsl(var(--navy-muted))'
   			},
+  			brand: {
+  				DEFAULT: 'hsl(var(--brand))',
+  				deep: 'hsl(var(--brand-deep))',
+  				soft: 'hsl(var(--brand-soft))'
+  			},
   			verify: {
   				DEFAULT: 'hsl(var(--verify))',
   				soft: 'hsl(var(--verify-soft))'
