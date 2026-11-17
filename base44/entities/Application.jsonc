@@ -1,0 +1,106 @@
+{
+  "type": "object",
+  "name": "Application",
+  "description": "A single program application created from an applicant's profile. Applicants create and read their own; only caseworkers (admins) change status.",
+  "properties": {
+    "applicant": {
+      "type": "string",
+      "description": "Applicant record id"
+    },
+    "applicant_name": {
+      "type": "string"
+    },
+    "program": {
+      "type": "string",
+      "enum": [
+        "SNAP",
+        "WIC",
+        "LIHEAP",
+        "Medicaid"
+      ],
+      "enumColors": [
+        "blue",
+        "purple",
+        "yellow",
+        "green"
+      ]
+    },
+    "est_monthly_value": {
+      "type": "number"
+    },
+    "benefit_label": {
+      "type": "string"
+    },
+    "eligibility": {
+      "type": "string",
+      "enum": [
+        "Likely eligible",
+        "Needs review"
+      ],
+      "enumColors": [
+        "green",
+        "yellow"
+      ]
+    },
+    "eligibility_reason": {
+      "type": "string",
+      "description": "Plain-language explanation of the eligibility estimate"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "Submitted",
+        "Under review",
+        "Approved",
+        "Denied"
+      ],
+      "enumColors": [
+        "yellow",
+        "blue",
+        "green",
+        "red"
+      ],
+      "default": "Submitted"
+    },
+    "decision_reason": {
+      "type": "string",
+      "description": "Caseworker's reason, required when denied"
+    },
+    "submitted_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "status_updated_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "applicant",
+    "program"
+  ],
+  "rls": {
+    "create": {
+      "$and": [
+        { "created_by_id": "{{user.id}}" },
+        { "data.status": "Submitted" }
+      ]
+    },
+    "read": {
+      "$or": [
+        { "created_by_id": "{{user.id}}" },
+        { "user_condition": { "role": "admin" } }
+      ]
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

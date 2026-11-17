@@ -1,0 +1,120 @@
+{
+  "type": "object",
+  "name": "Applicant",
+  "description": "One household's benefits profile. Each signed-in user owns exactly one; caseworkers (admins) can see all.",
+  "properties": {
+    "name": {
+      "type": "string"
+    },
+    "age": {
+      "type": "number"
+    },
+    "address": {
+      "type": "string"
+    },
+    "city": {
+      "type": "string"
+    },
+    "state": {
+      "type": "string",
+      "default": "OH"
+    },
+    "zip": {
+      "type": "string"
+    },
+    "household_size": {
+      "type": "number"
+    },
+    "children_count": {
+      "type": "number",
+      "description": "Children under 19 in the household"
+    },
+    "has_young_child_or_pregnant": {
+      "type": "boolean",
+      "description": "Someone pregnant, postpartum, or a child under 5 in the household (WIC)",
+      "default": false
+    },
+    "monthly_income": {
+      "type": "number",
+      "description": "Gross monthly household income"
+    },
+    "income_source": {
+      "type": "string",
+      "enum": [
+        "Self-reported",
+        "Uploaded document",
+        "Verified at source"
+      ],
+      "enumColors": [
+        "gray",
+        "blue",
+        "green"
+      ]
+    },
+    "income_updated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "employer": {
+      "type": "string"
+    },
+    "job_title": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "Not started",
+        "Verified",
+        "Applied",
+        "Approved"
+      ],
+      "enumColors": [
+        "gray",
+        "blue",
+        "yellow",
+        "green"
+      ],
+      "default": "Not started"
+    },
+    "sources_verified": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "consent_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "verified_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "name"
+  ],
+  "rls": {
+    "create": {
+      "created_by_id": "{{user.id}}"
+    },
+    "read": {
+      "$or": [
+        { "created_by_id": "{{user.id}}" },
+        { "user_condition": { "role": "admin" } }
+      ]
+    },
+    "update": {
+      "$or": [
+        { "created_by_id": "{{user.id}}" },
+        { "user_condition": { "role": "admin" } }
+      ]
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}
