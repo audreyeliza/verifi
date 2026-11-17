@@ -21,7 +21,7 @@ import {
 //   onChange: (partial) => void  — merge fields into the form
 //   applicant: the saved Applicant record (has .id)
 const input =
-  'w-full rounded-xl border border-border bg-white px-3.5 py-2.5 text-[14px] text-navy outline-none transition-colors focus:border-brand/50';
+  'w-full rounded-3xl border border-border/70 bg-white px-4 py-3 text-[14px] text-navy outline-none transition-colors focus:border-brand/50';
 
 function errorText(err) {
   return err?.response?.data?.error || err?.message || 'Something went wrong. Try again.';
@@ -179,7 +179,7 @@ export default function IncomeSection({ value, onChange, applicant }) {
   return (
     <section className="rounded-3xl border border-border/70 bg-white p-5 sm:p-6">
       <div className="flex items-center gap-3">
-        <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-secondary text-navy">
+        <span className="flex h-10 w-10 items-center justify-center rounded-2xl bg-brand-soft text-brand">
           <Wallet className="h-5 w-5" strokeWidth={2} />
         </span>
         <div>
@@ -286,7 +286,7 @@ export default function IncomeSection({ value, onChange, applicant }) {
                   <button
                     type="button"
                     onClick={() => setDrafts((prev) => prev.filter((item) => item.localId !== draft.localId))}
-                    className="rounded-2xl border border-border bg-white px-4 py-2.5 text-[14px] font-semibold text-navy"
+                    className="rounded-full border border-border bg-white px-4 py-2.5 text-[14px] font-semibold text-navy"
                   >
                     Remove
                   </button>

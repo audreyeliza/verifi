@@ -30,6 +30,19 @@ export default async function viewPrivateDocument(req) {
       return Response.json({ error: 'This record has no file.' }, { status: 404 });
     }
 
+    // Records are created from the browser, so someone could save a record that
+    // points at another person's file_uri. The first record to claim a file is
+    // its real owner; refuse if this record's owner isn't that person.
+    const claims = await base44.asServiceRole.entities[entityName].filter(
+      { file_uri: record.file_uri },
+      'created_date',
+      1
+    );
+    const first = Array.isArray(claims) ? claims[0] : claims?.items?.[0];
+    if (first && first.created_by_id !== record.created_by_id) {
+      return Response.json({ error: 'Not found' }, { status: 404 });
+    }
+
     const signed = await base44.asServiceRole.integrations.Core.CreateFileSignedUrl({
       file_uri: record.file_uri,
       expires_in: 300,

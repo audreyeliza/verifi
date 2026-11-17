@@ -20,7 +20,7 @@ function ApplicationActions({ application, onUpdate, busy }) {
   const [reason, setReason] = useState('');
   const closed = application.status === 'Approved' || application.status === 'Denied';
   const btn =
-    'rounded-lg border px-2.5 py-1.5 text-[12px] font-semibold transition-colors disabled:cursor-not-allowed disabled:opacity-50';
+    'rounded-full border px-3 py-1.5 text-[12px] font-semibold transition-colors disabled:cursor-not-allowed disabled:opacity-50';
 
   if (closed) return null;
 
@@ -37,7 +37,7 @@ function ApplicationActions({ application, onUpdate, busy }) {
           autoFocus
           required
           placeholder="Reason for denial (the applicant will see this)"
-          className="flex-1 rounded-xl border border-border bg-white px-3 py-2 text-[13px] outline-none focus:border-brand/50"
+          className="flex-1 rounded-3xl border border-border/70 bg-white px-3.5 py-2.5 text-[13px] outline-none focus:border-brand/50"
           value={reason}
           onChange={(e) => setReason(e.target.value)}
         />
@@ -239,7 +239,7 @@ export default function CaseDetail() {
         <div className="mt-4 animate-rise rounded-3xl border border-border bg-white p-6 shadow-card sm:p-8">
           <div className="flex flex-wrap items-start justify-between gap-5">
             <div className="flex items-start gap-4">
-              <span className="flex h-14 w-14 items-center justify-center rounded-full bg-secondary font-heading text-[17px] font-semibold text-navy">
+              <span className="flex h-14 w-14 items-center justify-center rounded-full bg-brand-soft font-heading text-[17px] font-semibold text-navy">
                 {initials(applicant.name)}
               </span>
               <div>
@@ -291,7 +291,7 @@ export default function CaseDetail() {
                 key={field.label}
                 className="flex flex-wrap items-center gap-3 border-b border-border/60 px-5 py-4 last:border-0"
               >
-                <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-secondary text-navy">
+                <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-brand-soft text-brand">
                   <field.icon className="h-4 w-4" strokeWidth={2.1} />
                 </span>
                 <div>
@@ -322,7 +322,7 @@ export default function CaseDetail() {
             <div className="mt-2.5 overflow-hidden rounded-3xl border border-border/70 bg-white">
               {documents.map((doc) => (
                 <div key={doc.id} className="flex flex-wrap items-center gap-3 border-b border-border/60 px-5 py-4 last:border-0">
-                  <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-secondary text-navy">
+                  <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-brand-soft text-brand">
                     <FileText className="h-4 w-4" />
                   </span>
                   <div className="min-w-0 flex-1">
@@ -367,7 +367,7 @@ export default function CaseDetail() {
                   className="flex flex-wrap items-center gap-3 border-b border-border/60 px-5 py-4 last:border-0"
                 >
                   <div className="flex items-center gap-3">
-                    <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-canvas text-[11px] font-bold text-navy">
+                    <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-brand-soft text-[11px] font-bold text-brand">
                       {(PROGRAM_LABELS[application.program] ?? application.program).slice(0, 2)}
                     </span>
                     <div>

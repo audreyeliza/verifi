@@ -25,7 +25,7 @@ const FIELDS = [
 ];
 
 const input =
-  'w-full rounded-xl border border-border bg-white px-3.5 py-2.5 text-[14px] text-navy outline-none transition-colors focus:border-brand/50';
+  'w-full rounded-3xl border border-border/70 bg-white px-4 py-3 text-[14px] text-navy outline-none transition-colors focus:border-brand/50';
 
 function Field({ label, className = '', children }) {
   return (
@@ -40,7 +40,7 @@ function Section({ icon: Icon, title, subtitle, children }) {
   return (
     <section className="rounded-3xl border border-border/70 bg-white p-5 sm:p-6">
       <div className="flex items-center gap-3">
-        <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-secondary text-navy">
+        <span className="flex h-10 w-10 items-center justify-center rounded-2xl bg-brand-soft text-brand">
           <Icon className="h-5 w-5" strokeWidth={2} />
         </span>
         <div>

@@ -82,7 +82,11 @@ export const getOrCreateMyApplicant = (user) => {
 
 export const getMyApplications = async (user) => {
   if (!user?.id) return [];
+  const applicant = await getMyApplicant(user);
+  if (!applicant?.id) return [];
+  // Scope to this profile. Admins can read every application, and demo
+  // households are created by the same account that owns this profile.
   return toList(
-    await base44.entities.Application.filter({ created_by_id: user.id }, '-submitted_at', 50)
+    await base44.entities.Application.filter({ applicant: applicant.id }, '-submitted_at', 50)
   );
 };

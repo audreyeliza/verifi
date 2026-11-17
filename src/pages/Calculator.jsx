@@ -9,7 +9,7 @@ import { incomeFromHours, raiseOutcome, raiseSummary } from '@/lib/raise';
 import { cn } from '@/lib/utils';
 
 const input =
-  'w-full rounded-xl border border-border bg-white px-3.5 py-2.5 text-[14px] text-navy outline-none transition-colors focus:border-brand/50';
+  'w-full rounded-3xl border border-border/70 bg-white px-4 py-3 text-[14px] text-navy outline-none transition-colors focus:border-brand/50';
 
 function amountLabel(row) {
   if (row.key === 'SNAP') return row.amount > 0 ? `~${money(row.amount)}/mo` : '$0 estimated';
