@@ -5,24 +5,31 @@
 // made by each agency. Numbers below are annual figures that change every year;
 // update them when the new tables are published and bump RULES_YEAR.
 //
-// Sources to re-check each year:
-// - HHS poverty guidelines (48 contiguous states): https://aspe.hhs.gov/poverty-guidelines
-// - SNAP max allotments + standard deduction: https://www.fns.usda.gov/snap/allotment/cola
-// - Ohio Medicaid income limits: https://medicaid.ohio.gov
-// - Ohio HEAP income limit: https://development.ohio.gov (Home Energy Assistance Program)
-// - WIC income limit (185% FPL): https://www.fns.usda.gov/wic/eligibility
+// When each table rolls over (update these, then run `npm test`):
+// - HHS poverty guidelines: published each January.
+//   https://aspe.hhs.gov/topics/poverty-economic-mobility/poverty-guidelines
+//   Ohio Medicaid adopts them ~March, WIC on July 1, Ohio HEAP for the July–May season,
+//   SNAP on October 1 (SNAP FY2027 limits use the 2026 guidelines).
+// - SNAP max allotments + deductions: USDA COLA memo, effective each October 1.
+//   https://www.fns.usda.gov/snap/allotment/cola
+// - Ohio Medicaid MAGI limits: https://medicaid.ohio.gov (eligibility chart)
+// - Ohio HEAP (175% FPL): https://development.ohio.gov / ODJFS Energy Assistance
+// - WIC (185% FPL): https://www.fns.usda.gov/wic/eligibility
 
-export const RULES_YEAR = 'FPL 2025 · SNAP FY2026';
+// Shown to users next to every estimate.
+export const RULES_YEAR = '2026 poverty guidelines · SNAP FY2027';
 
-// HHS 2025 poverty guideline: $15,650 for 1 person, +$5,500 per additional person.
-const FPL_BASE = 15650;
-const FPL_PER_PERSON = 5500;
+// HHS 2026 poverty guideline, 48 contiguous states + DC:
+// $15,960 for 1 person, +$5,680 per additional person (household of 4 = $33,000).
+const FPL_BASE = 15960;
+const FPL_PER_PERSON = 5680;
 
-// SNAP FY2026 (Oct 2025 – Sep 2026), 48 states.
-const SNAP_MAX_ALLOTMENT = [298, 546, 785, 994, 1183, 1421, 1571, 1789];
-const SNAP_MAX_EXTRA_PERSON = 218;
-const SNAP_STANDARD_DEDUCTION = [209, 209, 209, 223, 261, 299];
-const SNAP_MIN_BENEFIT = 24; // for 1–2 person households
+// SNAP FY2027 (Oct 1, 2026 – Sep 30, 2027), 48 states + DC.
+const SNAP_MAX_ALLOTMENT = [306, 562, 808, 1023, 1217, 1463, 1616, 1841];
+const SNAP_MAX_EXTRA_PERSON = 225;
+const SNAP_STANDARD_DEDUCTION = [217, 217, 217, 229, 268, 308];
+// Minimum benefit for 1–2 person households = 8% of the 1-person max, rounded down.
+const SNAP_MIN_BENEFIT = Math.floor(SNAP_MAX_ALLOTMENT[0] * 0.08);
 const SNAP_GROSS_LIMIT = 1.3; // 130% FPL
 const SNAP_EARNED_INCOME_DEDUCTION = 0.2;
 
@@ -70,6 +77,21 @@ function snap({ income, size }) {
   // Shelter, childcare and medical deductions would raise the benefit further.
   const standard = pick(SNAP_STANDARD_DEDUCTION, size);
   const net = Math.max(0, income * (1 - SNAP_EARNED_INCOME_DEDUCTION) - standard);
+
+  // Second test: net income must be at or under 100% of the poverty line. We can't
+  // see shelter/childcare deductions, which often bring people under it, so a
+  // failure here is "Needs review" rather than a flat no.
+  const netLimit = monthlyFpl(size);
+  if (net > netLimit) {
+    return {
+      result: 'Needs review',
+      limit: gross.limit,
+      amount: 0,
+      benefit: 'Depends on rent and childcare',
+      reason: `Gross income passes, but net income (~${money(net)}/mo) is above SNAP's net limit of ${money(netLimit)}/mo before rent and childcare deductions. A caseworker will check those.`,
+    };
+  }
+
   const max = pick(SNAP_MAX_ALLOTMENT, size, SNAP_MAX_EXTRA_PERSON);
   let amount = round(max - net * 0.3);
   if (size <= 2) amount = Math.max(amount, SNAP_MIN_BENEFIT);

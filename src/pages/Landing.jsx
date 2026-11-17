@@ -26,7 +26,7 @@ const STATS = [
 ];
 
 const PROGRAMS = [
-  { name: 'SNAP', value: '~$344/mo' },
+  { name: 'SNAP', value: '~$369/mo' },
   { name: 'WIC', value: 'Food package' },
   { name: 'HEAP', value: 'Energy help' },
   { name: 'Medicaid', value: 'Covered' },
